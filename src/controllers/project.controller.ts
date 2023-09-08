@@ -1,7 +1,9 @@
 import { Project } from '../models/Project.js';
 import { Task } from '../models/Task.js';
+import { Request, Response } from 'express';
+import logger from '../logs/logger.js';
 
-export async function getProjects(req, res) {
+export async function getProjects(req: Request, res: Response) {
   try {
     const projects = await Project.findAll({
       attributes: ['id', 'name', 'priority', 'description'],
@@ -9,13 +11,15 @@ export async function getProjects(req, res) {
 
     res.json(projects);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    if (error instanceof Error)
+      res.status(500).json({
+        message: error.message,
+      });
+    else logger.error(error);
   }
 }
 
-export async function createProject(req, res) {
+export async function createProject(req: Request, res: Response) {
   console.log('Creating project', req.body);
   const { name, priority, description } = req.body;
   try {
@@ -31,13 +35,15 @@ export async function createProject(req, res) {
     );
     return res.json(newProject);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    if (error instanceof Error)
+      res.status(500).json({
+        message: error.message,
+      });
+    else logger.error(error);
   }
 }
 
-export async function getProject(req, res) {
+export async function getProject(req: Request, res: Response) {
   const { id } = req.params;
   try {
     const project = await Project.findOne({
@@ -45,18 +51,23 @@ export async function getProject(req, res) {
     });
     return res.json(project);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    if (error instanceof Error)
+      res.status(500).json({
+        message: error.message,
+      });
+    else logger.error(error);
   }
 }
 
-export async function updateProject(req, res) {
+export async function updateProject(req: Request, res: Response) {
   const { id } = req.params;
   const { name, priority, description } = req.body;
 
   try {
     const project = await Project.findByPk(id);
+    if (!project) {
+      throw new Error('Error');
+    }
     project.name = name;
     project.priority = priority;
     project.description = description;
@@ -65,13 +76,15 @@ export async function updateProject(req, res) {
 
     return res.json(project);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    if (error instanceof Error)
+      res.status(500).json({
+        message: error.message,
+      });
+    else logger.error(error);
   }
 }
 
-export async function deleteProject(req, res) {
+export async function deleteProject(req: Request, res: Response) {
   const { id } = req.params;
   try {
     await Task.destroy({
@@ -82,13 +95,15 @@ export async function deleteProject(req, res) {
     });
     return res.sendStatus(204);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    if (error instanceof Error)
+      res.status(500).json({
+        message: error.message,
+      });
+    else logger.error(error);
   }
 }
 
-export async function getProjectTasks(req, res) {
+export async function getProjectTasks(req: Request, res: Response) {
   const { id } = req.params;
   try {
     const tasks = await Task.findAll({
@@ -97,13 +112,15 @@ export async function getProjectTasks(req, res) {
     });
     return res.json(tasks);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    if (error instanceof Error)
+      res.status(500).json({
+        message: error.message,
+      });
+    else logger.error(error);
   }
 }
 
-export async function getProjectsTasks(req, res) {
+export async function getProjectsTasks(req: Request, res: Response) {
   try {
     const projects = await Project.findAll({
       attributes: ['id', 'name', 'priority', 'description'],
@@ -115,10 +132,13 @@ export async function getProjectsTasks(req, res) {
         },
       ],
     });
+
     res.json(projects);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    if (error instanceof Error)
+      res.status(500).json({
+        message: error.message,
+      });
+    else logger.error(error);
   }
 }

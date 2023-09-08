@@ -1,7 +1,7 @@
-import app from './app.js';
-import { sequelize } from './database/database.js';
+import app from './app';
+import { sequelize } from './database/database';
 import 'dotenv/config';
-import logger from './logs/logger.js';
+import logger from './logs/logger';
 
 async function main() {
   console.clear();
@@ -10,9 +10,6 @@ async function main() {
   app.listen(PORT);
   logger.info(`Server on port ${PORT}`);
   logger.error('Server on port ');
-  logger.debug('Server on port ');
-  logger.warn('Server on port ');
-  logger.fatal('Server on port ');
 }
 
 main();

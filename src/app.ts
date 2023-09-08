@@ -4,8 +4,8 @@ import morgan from 'morgan';
 const app = express();
 
 // Import routes
-import projectRoutes from './routes/projects.routes.js';
-import taskRoutes from './routes/tasks.routes.js';
+import projectRoutes from './routes/projects.routes';
+import taskRoutes from './routes/tasks.routes';
 
 // Middlewares
 app.use(morgan('dev'));

@@ -1,8 +1,24 @@
-import { DataTypes } from 'sequelize';
-import { sequelize } from '../database/database.js';
-import { Task } from './Task.js';
+import { DataTypes, Optional, Model } from 'sequelize';
+import { sequelize } from '../database/database';
+import { Task } from './Task';
 
-export const Project = sequelize.define(
+interface ProjectAttributes {
+  id: number;
+  name: string;
+  priority: number;
+  description: string;
+}
+
+interface ProjectCreationAttributes extends Optional<ProjectAttributes, 'id'> {}
+
+interface ProjectInstance
+  extends Model<ProjectAttributes, ProjectCreationAttributes>,
+    ProjectAttributes {
+  createdAt?: Date;
+  updateAt?: Date;
+}
+
+export const Project = sequelize.define<ProjectInstance>(
   'projects',
   {
     id: {
